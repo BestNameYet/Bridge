@@ -1,0 +1,23 @@
+name: Extract bridge archive
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "bridge.zip"
+      - ".github/workflows/extract.yml"
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Extract archive
+        run: |
+          mkdir -p extracted
+          unzip -o bridge.zip -d extracted
+
+      - name: Show extracted files
+        run: find extracted -type f
