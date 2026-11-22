@@ -7,6 +7,9 @@ on:
       - "bridge.zip"
       - ".github/workflows/extract.yml"
 
+permissions:
+  contents: write
+
 jobs:
   extract:
     runs-on: ubuntu-latest
@@ -19,5 +22,12 @@ jobs:
           mkdir -p extracted
           unzip -o bridge.zip -d extracted
 
-      - name: Show extracted files
-        run: find extracted -type f
+      - name: Commit extracted files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add extracted/
+          if ! git diff --cached --quiet; then
+            git commit -m "Extract bridge archive"
+            git push
+          fi
